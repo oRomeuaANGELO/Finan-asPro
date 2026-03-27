@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { Transaction, Budget, FixedBill, Investment, BankAccount, UserProfile, FinancialData, FinancialGoal, ShoppingItem } from "../types";
 import { INITIAL_TRANSACTIONS, INITIAL_BUDGETS, INITIAL_FIXED_BILLS, INITIAL_INVESTMENTS, INITIAL_BANK_ACCOUNTS, INITIAL_USER_PROFILE, INITIAL_GOALS, INITIAL_SHOPPING_LIST } from "../constants";
 import { bankSyncService } from "../services/bankSyncService";
 
-export function useFinancialData() {
+export function useFinancialData(activeTab?: string) {
   const [data, setData] = useState<FinancialData>(() => {
     const saved = localStorage.getItem("financial_data");
     const initialData: FinancialData = {
@@ -48,6 +48,57 @@ export function useFinancialData() {
   useEffect(() => {
     localStorage.setItem("financial_data", JSON.stringify(data));
   }, [data]);
+
+  const bankAccountsRef = useRef(data.bankAccounts);
+  useEffect(() => {
+    bankAccountsRef.current = data.bankAccounts;
+  }, [data.bankAccounts]);
+
+  const syncBankAccount = useCallback(async (id: string, institution?: string) => {
+    let targetInstitution = institution;
+    if (!targetInstitution) {
+      const account = bankAccountsRef.current.find(b => b.id === id);
+      targetInstitution = account?.institution;
+    }
+    
+    if (!targetInstitution) return;
+
+    updateBankAccount(id, { status: "Sincronizando" });
+    
+    try {
+      const response = await bankSyncService.fetchUpdatedBalance(id, targetInstitution);
+      
+      updateBankAccount(id, { 
+        status: response.status, 
+        lastSync: response.lastSync,
+        balance: response.newBalance
+      });
+    } catch (error) {
+      console.error("Failed to sync bank account:", error);
+      updateBankAccount(id, { status: "Desconectado" });
+    }
+  }, []);
+
+  // Automatic Bank Sync every 60 seconds when on 'banks' tab
+  useEffect(() => {
+    if (activeTab !== "banks") return;
+
+    const syncAll = async () => {
+      console.log("Starting automatic bank synchronization...");
+      const currentAccounts = bankAccountsRef.current;
+      for (const account of currentAccounts) {
+        if (account.status !== "Sincronizando") {
+          await syncBankAccount(account.id, account.institution);
+        }
+      }
+    };
+
+    // Initial sync when entering the tab
+    syncAll();
+
+    const interval = setInterval(syncAll, 60000);
+    return () => clearInterval(interval);
+  }, [activeTab, syncBankAccount]);
 
   const addTransaction = (transaction: Omit<Transaction, "id">) => {
     const newTransaction = { ...transaction, id: crypto.randomUUID() };
@@ -120,26 +171,6 @@ export function useFinancialData() {
       ...prev,
       bankAccounts: prev.bankAccounts.filter((b) => b.id !== id),
     }));
-  };
-
-  const syncBankAccount = async (id: string) => {
-    const account = data.bankAccounts.find(b => b.id === id);
-    if (!account) return;
-
-    updateBankAccount(id, { status: "Sincronizando" });
-    
-    try {
-      const response = await bankSyncService.fetchUpdatedBalance(id, account.institution);
-      
-      updateBankAccount(id, { 
-        status: response.status, 
-        lastSync: response.lastSync,
-        balance: response.newBalance
-      });
-    } catch (error) {
-      console.error("Failed to sync bank account:", error);
-      updateBankAccount(id, { status: "Desconectado" });
-    }
   };
 
   const addInvestment = (investment: Omit<Investment, "id">) => {

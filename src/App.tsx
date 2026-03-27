@@ -52,7 +52,7 @@ export default function App() {
     setSavingsGoal,
     setAlertDays,
     updateUserProfile
-  } = useFinancialData();
+  } = useFinancialData(activeTab);
 
   const renderContent = () => {
     switch (activeTab) {

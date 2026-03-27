@@ -156,7 +156,7 @@ export function Investments({ data, onSetGoal, onAdd, onUpdate, onDelete }: Inve
 
       {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div className="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 relative overflow-hidden group">
+        <div className="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 relative overflow-hidden group hover:scale-[1.02] transition-all duration-300">
           <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:scale-110 transition-transform">
             <TrendingUp className="w-24 h-24" />
           </div>
@@ -168,7 +168,7 @@ export function Investments({ data, onSetGoal, onAdd, onUpdate, onDelete }: Inve
           </div>
         </div>
 
-        <div className="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 relative overflow-hidden group">
+        <div className="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 relative overflow-hidden group hover:scale-[1.02] transition-all duration-300">
           <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:scale-110 transition-transform">
             <Wallet className="w-24 h-24" />
           </div>
@@ -177,7 +177,7 @@ export function Investments({ data, onSetGoal, onAdd, onUpdate, onDelete }: Inve
           <p className="text-slate-500 text-sm font-medium mt-4">{data.bankAccounts.length} contas ativas</p>
         </div>
 
-        <div className="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 relative overflow-hidden group">
+        <div className="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 relative overflow-hidden group hover:scale-[1.02] transition-all duration-300">
           <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:scale-110 transition-transform">
             <ShieldCheck className="w-24 h-24" />
           </div>
@@ -186,7 +186,7 @@ export function Investments({ data, onSetGoal, onAdd, onUpdate, onDelete }: Inve
           <p className="text-slate-500 text-sm font-medium mt-4">Meta: 6 meses de despesas</p>
         </div>
 
-        <div className="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 relative overflow-hidden group">
+        <div className="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 relative overflow-hidden group hover:scale-[1.02] transition-all duration-300">
           <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:scale-110 transition-transform">
             <Target className="w-24 h-24" />
           </div>
@@ -206,7 +206,7 @@ export function Investments({ data, onSetGoal, onAdd, onUpdate, onDelete }: Inve
 
       {/* Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <div className="bg-white p-8 rounded-3xl shadow-sm border border-slate-100">
+        <div className="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 hover:scale-[1.01] transition-all duration-300">
           <h3 className="text-lg font-bold text-slate-900 mb-8 flex items-center gap-2">
             <PieChartIcon className="w-5 h-5 text-blue-500" />
             Distribuição de Ativos
@@ -234,7 +234,7 @@ export function Investments({ data, onSetGoal, onAdd, onUpdate, onDelete }: Inve
           </div>
         </div>
 
-        <div className="bg-white p-8 rounded-3xl shadow-sm border border-slate-100">
+        <div className="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 hover:scale-[1.01] transition-all duration-300">
           <h3 className="text-lg font-bold text-slate-900 mb-8 flex items-center gap-2">
             <BarChart3 className="w-5 h-5 text-emerald-500" />
             Evolução Patrimonial
@@ -283,7 +283,7 @@ export function Investments({ data, onSetGoal, onAdd, onUpdate, onDelete }: Inve
               const remainingMonths = calculateRemainingMonths(goal.deadline);
               
               return (
-                <div key={goal.id} className="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 group hover:shadow-xl transition-all duration-500">
+                <div key={goal.id} className="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 group hover:shadow-xl hover:scale-[1.02] transition-all duration-500">
                   <div className="flex items-start justify-between mb-6">
                     <div className="flex items-center gap-4">
                       <div className={cn("w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg", goal.color || "bg-indigo-500")}>
