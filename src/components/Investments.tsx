@@ -18,7 +18,8 @@ import {
   Star,
   Clock,
   CheckCircle2,
-  Wallet
+  Wallet,
+  Calendar
 } from "lucide-react";
 import { 
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
@@ -275,41 +276,59 @@ export function Investments({ data, onSetGoal, onAdd, onUpdate, onDelete }: Inve
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {data.goals.map((goal) => {
               const Icon = getCategoryIcon(goal.category);
               const progress = (goal.currentValue / goal.targetValue) * 100;
               const remainingMonths = calculateRemainingMonths(goal.deadline);
               
               return (
-                <div key={goal.id} className="p-6 rounded-2xl bg-slate-50 border border-slate-100 hover:shadow-md transition-all group">
-                  <div className="flex items-center gap-4 mb-4">
-                    <div className={cn("w-12 h-12 rounded-xl flex items-center justify-center shadow-sm", goal.color || "bg-indigo-500")}>
-                      <Icon className="w-6 h-6 text-white" />
+                <div key={goal.id} className="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 group hover:shadow-xl transition-all duration-500">
+                  <div className="flex items-start justify-between mb-6">
+                    <div className="flex items-center gap-4">
+                      <div className={cn("w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg", goal.color || "bg-indigo-500")}>
+                        <Icon className="w-7 h-7 text-white" />
+                      </div>
+                      <div>
+                        <h4 className="text-xl font-bold text-slate-900">{goal.name}</h4>
+                        <div className="flex items-center gap-2 text-slate-500 text-sm mt-1">
+                          <Calendar className="w-4 h-4" />
+                          Meta: {new Date(goal.deadline).toLocaleDateString('pt-BR')}
+                        </div>
+                      </div>
                     </div>
-                    <div className="flex-1">
-                      <h4 className="font-bold text-slate-900 truncate">{goal.name}</h4>
-                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-                        {remainingMonths} meses restantes
-                      </p>
+                    <div className="text-right">
+                      <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Restam</p>
+                      <p className="text-sm font-bold text-slate-900">{remainingMonths} meses</p>
                     </div>
                   </div>
 
-                  <div className="space-y-3">
-                    <div className="flex justify-between text-xs font-bold">
-                      <span className="text-slate-500">{formatCurrency(goal.currentValue)}</span>
-                      <span className="text-slate-900">{formatCurrency(goal.targetValue)}</span>
+                  <div className="space-y-4">
+                    <div className="flex justify-between items-end">
+                      <div>
+                        <p className="text-sm font-bold text-slate-400 uppercase tracking-wider">Progresso</p>
+                        <p className="text-2xl font-black text-slate-900">
+                          {formatCurrency(goal.currentValue)} <span className="text-slate-400 text-sm font-bold">/ {formatCurrency(goal.targetValue)}</span>
+                        </p>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-2xl font-black text-emerald-600">{progress.toFixed(1)}%</p>
+                      </div>
                     </div>
-                    <div className="h-2 bg-white rounded-full overflow-hidden border border-slate-100">
+
+                    <div className="h-4 bg-slate-100 rounded-full overflow-hidden">
                       <div 
                         className={cn("h-full transition-all duration-1000", goal.color || "bg-indigo-500")}
                         style={{ width: `${Math.min(progress, 100)}%` }}
                       />
                     </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{progress.toFixed(0)}%</span>
-                      {progress >= 100 && <CheckCircle2 className="w-4 h-4 text-emerald-500" />}
-                    </div>
+
+                    {progress >= 100 && (
+                      <div className="mt-4 p-3 bg-emerald-50 border border-emerald-100 rounded-2xl flex items-center gap-3 text-emerald-700">
+                        <CheckCircle2 className="w-5 h-5" />
+                        <span className="text-sm font-bold">Objetivo Alcançado!</span>
+                      </div>
+                    )}
                   </div>
                 </div>
               );

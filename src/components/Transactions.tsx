@@ -247,33 +247,97 @@ export function Transactions({ transactions, onAdd, onUpdate, onDelete }: Transa
                   </tr>
                   {expandedRowId === t.id && (
                     <tr className="bg-slate-50/30 animate-in slide-in-from-top-2 duration-200">
-                      <td colSpan={7} className="px-6 py-4 border-t border-slate-100/50">
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                          <div className="flex items-center gap-3">
-                            <div className="p-2 bg-white rounded-xl shadow-sm border border-slate-100">
-                              <Wallet className="w-4 h-4 text-slate-500" />
+                      <td colSpan={7} className="px-6 py-6 border-t border-slate-100/50">
+                        <div className="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm">
+                          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+                            <div className="space-y-4">
+                              <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest">Informações Gerais</h4>
+                              <div className="space-y-3">
+                                <div className="flex items-center gap-3">
+                                  <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center">
+                                    <CreditCard className="w-4 h-4 text-blue-600" />
+                                  </div>
+                                  <div>
+                                    <p className="text-[10px] font-bold text-slate-400 uppercase">Método</p>
+                                    <p className="text-sm font-semibold text-slate-700">{t.paymentMethod}</p>
+                                  </div>
+                                </div>
+                                <div className="flex items-center gap-3">
+                                  <div className="w-8 h-8 rounded-lg bg-purple-50 flex items-center justify-center">
+                                    <Tag className="w-4 h-4 text-purple-600" />
+                                  </div>
+                                  <div>
+                                    <p className="text-[10px] font-bold text-slate-400 uppercase">Subcategoria</p>
+                                    <p className="text-sm font-semibold text-slate-700">{t.subcategory || "Nenhuma"}</p>
+                                  </div>
+                                </div>
+                              </div>
                             </div>
-                            <div>
-                              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Método de Pagamento</p>
-                              <p className="text-sm font-semibold text-slate-700">{t.paymentMethod}</p>
+
+                            <div className="space-y-4">
+                              <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest">Prioridade & Status</h4>
+                              <div className="space-y-3">
+                                <div className="flex items-center gap-3">
+                                  <div className={cn(
+                                    "w-8 h-8 rounded-lg flex items-center justify-center",
+                                    t.priority === "Alta" ? "bg-rose-50" : t.priority === "Média" ? "bg-amber-50" : "bg-slate-50"
+                                  )}>
+                                    <AlertCircle className={cn(
+                                      "w-4 h-4",
+                                      t.priority === "Alta" ? "text-rose-600" : t.priority === "Média" ? "text-amber-600" : "text-slate-600"
+                                    )} />
+                                  </div>
+                                  <div>
+                                    <p className="text-[10px] font-bold text-slate-400 uppercase">Prioridade</p>
+                                    <p className="text-sm font-semibold text-slate-700">{t.priority}</p>
+                                  </div>
+                                </div>
+                                <div className="flex items-center gap-3">
+                                  <div className={cn(
+                                    "w-8 h-8 rounded-lg flex items-center justify-center",
+                                    t.status === "Pago" ? "bg-emerald-50" : "bg-amber-50"
+                                  )}>
+                                    {t.status === "Pago" ? <CheckCircle2 className="w-4 h-4 text-emerald-600" /> : <Clock className="w-4 h-4 text-amber-600" />}
+                                  </div>
+                                  <div>
+                                    <p className="text-[10px] font-bold text-slate-400 uppercase">Status</p>
+                                    <p className="text-sm font-semibold text-slate-700">{t.status}</p>
+                                  </div>
+                                </div>
+                              </div>
                             </div>
-                          </div>
-                          <div className="flex items-center gap-3">
-                            <div className="p-2 bg-white rounded-xl shadow-sm border border-slate-100">
-                              <AlertCircle className="w-4 h-4 text-slate-500" />
+
+                            <div className="space-y-4">
+                              <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest">Data & Hora</h4>
+                              <div className="space-y-3">
+                                <div className="flex items-center gap-3">
+                                  <div className="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center">
+                                    <CalendarIcon className="w-4 h-4 text-slate-600" />
+                                  </div>
+                                  <div>
+                                    <p className="text-[10px] font-bold text-slate-400 uppercase">Data</p>
+                                    <p className="text-sm font-semibold text-slate-700">{new Date(t.date).toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' })}</p>
+                                  </div>
+                                </div>
+                                <div className="flex items-center gap-3">
+                                  <div className="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center">
+                                    <Clock className="w-4 h-4 text-slate-600" />
+                                  </div>
+                                  <div>
+                                    <p className="text-[10px] font-bold text-slate-400 uppercase">Horário</p>
+                                    <p className="text-sm font-semibold text-slate-700">{t.time}</p>
+                                  </div>
+                                </div>
+                              </div>
                             </div>
-                            <div>
-                              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Prioridade</p>
-                              <p className="text-sm font-semibold text-slate-700">{t.priority}</p>
-                            </div>
-                          </div>
-                          <div className="flex items-center gap-3">
-                            <div className="p-2 bg-white rounded-xl shadow-sm border border-slate-100">
-                              <Tag className="w-4 h-4 text-slate-500" />
-                            </div>
-                            <div>
-                              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Subcategoria</p>
-                              <p className="text-sm font-semibold text-slate-700">{t.subcategory}</p>
+
+                            <div className="space-y-4">
+                              <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest">Resumo</h4>
+                              <div className="p-4 bg-slate-50 rounded-xl border border-slate-100">
+                                <p className="text-xs text-slate-500 leading-relaxed italic">
+                                  "{t.description}" - Esta transação de {t.type.toLowerCase()} no valor de {formatCurrency(t.value)} foi classificada como {t.category.toLowerCase()}.
+                                </p>
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -389,13 +453,78 @@ function TransactionModal({ initialData, onClose, onSave }: { initialData?: Tran
             <div className="space-y-2">
               <label className="text-sm font-bold text-slate-700">Categoria</label>
               <select 
-                className="w-full px-4 py-3 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-emerald-500/20 transition-all"
+                className="w-full px-4 py-3 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-emerald-500/20 transition-all cursor-pointer"
                 value={formData.category}
                 onChange={(e) => setFormData({ ...formData, category: e.target.value })}
               >
                 {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
                 <option value="Salário">Salário</option>
               </select>
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-bold text-slate-700">Subcategoria</label>
+              <input 
+                type="text" 
+                placeholder="Ex: Supermercado, Aluguel..."
+                className="w-full px-4 py-3 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-emerald-500/20 transition-all"
+                value={formData.subcategory}
+                onChange={(e) => setFormData({ ...formData, subcategory: e.target.value })}
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-bold text-slate-700">Método de Pagamento</label>
+              <select 
+                className="w-full px-4 py-3 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-emerald-500/20 transition-all cursor-pointer"
+                value={formData.paymentMethod}
+                onChange={(e) => setFormData({ ...formData, paymentMethod: e.target.value })}
+              >
+                <option value="Pix">Pix</option>
+                <option value="Cartão de Crédito">Cartão de Crédito</option>
+                <option value="Cartão de Débito">Cartão de Débito</option>
+                <option value="Dinheiro">Dinheiro</option>
+                <option value="Boleto">Boleto</option>
+                <option value="Transferência">Transferência</option>
+              </select>
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-bold text-slate-700">Status</label>
+              <div className="flex gap-2">
+                {["Pago", "Pendente"].map((status) => (
+                  <button
+                    key={status}
+                    type="button"
+                    onClick={() => setFormData({ ...formData, status: status as any })}
+                    className={cn(
+                      "flex-1 py-3 rounded-2xl text-sm font-bold transition-all",
+                      formData.status === status 
+                        ? "bg-blue-600 text-white" 
+                        : "bg-slate-50 text-slate-600 hover:bg-slate-100"
+                    )}
+                  >
+                    {status}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-bold text-slate-700">Prioridade</label>
+              <div className="flex gap-2">
+                {["Baixa", "Média", "Alta"].map((p) => (
+                  <button
+                    key={p}
+                    type="button"
+                    onClick={() => setFormData({ ...formData, priority: p as any })}
+                    className={cn(
+                      "flex-1 py-3 rounded-2xl text-sm font-bold transition-all",
+                      formData.priority === p 
+                        ? p === "Alta" ? "bg-rose-600 text-white" : p === "Média" ? "bg-amber-600 text-white" : "bg-slate-600 text-white"
+                        : "bg-slate-50 text-slate-600 hover:bg-slate-100"
+                    )}
+                  >
+                    {p}
+                  </button>
+                ))}
+              </div>
             </div>
             <div className="space-y-2 md:col-span-2">
               <label className="text-sm font-bold text-slate-700">Descrição</label>
